@@ -200,7 +200,7 @@
             <img id="preview" class="preview-img" alt="Preview">
         </div>
 
-        <input type="file" id="fileInput" accept="image/*" capture="environment">
+        <input type="file" id="fileInput" accept="image/*" capture="user">
 
         <button class="btn btn-capture" id="captureBtn">
             <span class="btn-icon">📷</span>
@@ -234,21 +234,82 @@
         captureBtn.addEventListener('click', () => fileInput.click());
 
         // File selected
-        fileInput.addEventListener('change', (e) => {
+        fileInput.addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (file) {
-                selectedFile = file;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.src = e.target.result;
-                    preview.classList.add('show');
-                    placeholder.style.display = 'none';
-                    submitBtn.classList.add('show');
-                    hideStatus();
-                };
-                reader.readAsDataURL(file);
+                showStatus('Processing image...', 'info');
+                try {
+                    const processedFile = await processImage(file);
+                    selectedFile = processedFile;
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        preview.src = e.target.result;
+                        preview.classList.add('show');
+                        placeholder.style.display = 'none';
+                        submitBtn.classList.add('show');
+                        hideStatus();
+                    };
+                    reader.readAsDataURL(processedFile);
+                } catch (error) {
+                    console.error('Image processing failed:', error);
+                    showStatus('❌ Failed to process image.', 'error');
+                }
             }
         });
+
+        // Image Processing Function
+        function processImage(file) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Target dimensions
+                    const targetWidth = 1080;
+                    const targetHeight = 1920;
+
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+
+                    // Calculate scaling to cover the canvas (like object-fit: cover)
+                    const scale = Math.max(targetWidth / img.width, targetHeight / img.height);
+                    const x = (targetWidth - img.width * scale) / 2;
+                    const y = (targetHeight - img.height * scale) / 2;
+
+                    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+                    // Compress to < 1MB
+                    let quality = 0.9;
+
+                    function compress() {
+                        canvas.toBlob((blob) => {
+                            if (!blob) {
+                                reject(new Error('Canvas to Blob conversion failed'));
+                                return;
+                            }
+
+                            if (blob.size <= 1024 * 1024 || quality <= 0.1) {
+                                // Create a new File object from the blob
+                                const newFile = new File([blob], file.name, {
+                                    type: 'image/jpeg',
+                                    lastModified: Date.now()
+                                });
+                                resolve(newFile);
+                            } else {
+                                quality -= 0.1;
+                                compress();
+                            }
+                        }, 'image/jpeg', quality);
+                    }
+
+                    compress();
+                };
+                img.onerror = reject;
+                img.src = URL.createObjectURL(file);
+            });
+        }
 
         // Submit button click
         submitBtn.addEventListener('click', async () => {
