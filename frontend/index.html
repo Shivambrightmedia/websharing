@@ -99,7 +99,7 @@
         .preview-img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             display: none;
         }
 
@@ -266,19 +266,24 @@
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
 
-                    // Target dimensions
-                    const targetWidth = 1080;
-                    const targetHeight = 1920;
+                    // Max dimensions (fit within limits without cropping)
+                    const maxWidth = 1080;
+                    const maxHeight = 1920;
 
-                    canvas.width = targetWidth;
-                    canvas.height = targetHeight;
+                    let newWidth = img.width;
+                    let newHeight = img.height;
 
-                    // Calculate scaling to cover the canvas (like object-fit: cover)
-                    const scale = Math.max(targetWidth / img.width, targetHeight / img.height);
-                    const x = (targetWidth - img.width * scale) / 2;
-                    const y = (targetHeight - img.height * scale) / 2;
+                    // Calculate scaling to fit (contain)
+                    if (newWidth > maxWidth || newHeight > maxHeight) {
+                        const ratio = Math.min(maxWidth / newWidth, maxHeight / newHeight);
+                        newWidth *= ratio;
+                        newHeight *= ratio;
+                    }
 
-                    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                    canvas.width = newWidth;
+                    canvas.height = newHeight;
+
+                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
 
                     // Compress to < 1MB
                     let quality = 0.9;
