@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Image Sharing</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .index-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .index-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #818cf8 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .index-subtitle {
+            color: #a0a0b0;
+            margin-bottom: 48px;
+            font-size: 1.1rem;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 32px 48px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-link:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-icon {
+            font-size: 3rem;
+        }
+
+        .btn-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .btn-desc {
+            font-size: 0.9rem;
+            color: #a0a0b0;
+        }
+    </style>
+</head>
+
+<body class="mobile-page">
+    <div class="index-container">
+        <h1 class="index-title">📸 Real-Time Image Sharing</h1>
+        <p class="index-subtitle">Capture photos on mobile, display them live on screen</p>
+
+        <div class="buttons">
+            <a href="mobile.html" class="btn-link">
+                <span class="btn-icon">📱</span>
+                <span class="btn-title">Mobile</span>
+                <span class="btn-desc">Capture & upload photos</span>
+            </a>
+
+            <a href="screen.html" class="btn-link">
+                <span class="btn-icon">📺</span>
+                <span class="btn-title">Screen</span>
+                <span class="btn-desc">Display live images</span>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
