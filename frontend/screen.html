@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Display</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="screen-page">
+    <div class="screen-container">
+        <!-- Waiting State -->
+        <div class="waiting-state" id="waitingState">
+            <div class="waiting-animation">
+                <div class="pulse-ring"></div>
+                <div class="pulse-ring"></div>
+                <div class="pulse-ring"></div>
+                <div class="waiting-icon">📷</div>
+            </div>
+            <h1>Waiting for Images...</h1>
+            <p>Capture a photo on your mobile device</p>
+        </div>
+
+        <!-- Image Display -->
+        <div class="image-display hidden" id="imageDisplay">
+            <img id="displayImage" class="display-image" alt="Captured Image">
+        </div>
+
+        <!-- Connection Status -->
+        <div class="screen-status" id="screenStatus">
+            <span class="status-dot disconnected"></span>
+            <span id="statusText">Connecting...</span>
+        </div>
+    </div>
+
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/screen.js"></script>
+</body>
+
+</html>
