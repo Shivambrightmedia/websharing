@@ -269,9 +269,14 @@
                     { method: 'POST', body: formData }
                 );
 
-                if (!response.ok) throw new Error('Upload failed');
-
                 const data = await response.json();
+
+                if (!response.ok) {
+                    console.error('Cloudinary error:', data);
+                    throw new Error(data.error?.message || 'Upload failed');
+                }
+
+                console.log('Upload successful:', data);
                 showStatus('✅ Photo uploaded successfully!', 'success');
 
                 // Reset after 2 seconds
