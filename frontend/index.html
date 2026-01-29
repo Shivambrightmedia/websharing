@@ -262,21 +262,15 @@
                 const formData = new FormData();
                 formData.append('file', selectedFile);
                 formData.append('upload_preset', UPLOAD_PRESET);
-                formData.append('public_id', 'lake_captured');
 
                 const response = await fetch(
                     `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
                     { method: 'POST', body: formData }
                 );
 
+                if (!response.ok) throw new Error('Upload failed');
+
                 const data = await response.json();
-
-                if (!response.ok) {
-                    console.error('Cloudinary error:', data);
-                    throw new Error(data.error?.message || 'Upload failed');
-                }
-
-                console.log('Upload successful:', data);
                 showStatus('✅ Photo uploaded successfully!', 'success');
 
                 // Reset after 2 seconds
